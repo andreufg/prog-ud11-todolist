@@ -17,7 +17,7 @@
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                <children>
-                  <ListView fixedCellSize="50.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="70.0" />
+                  <ListView fx:id="tareaListView" fixedCellSize="50.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="70.0" />
                   <HBox alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="65.0" prefWidth="200.0" style="-fx-background-color: #3d5afe;" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                      <children>
                         <ImageView fitHeight="56.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
@@ -36,7 +36,7 @@
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                <children>
-                  <TextField AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="5.0" />
+                  <TextField fx:id="nuevaTareaTextField" promptText="Texto de prueba" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="5.0" />
                   <Button mnemonicParsing="false" prefWidth="70.0" text="Button" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="323.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
                </children></AnchorPane>
         </items>

@@ -1,9 +1,12 @@
 package es.progcipfpbatoi;
 
+import es.progcipfpbatoi.controlador.TareaController;
+import es.progcipfpbatoi.modelo.repositorios.InMemoryTareaRepository;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -13,22 +16,22 @@ import java.io.IOException;
  */
 public class App extends Application {
 
-    private static Scene scene;
-
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("primary"), 640, 480);
-        stage.setScene(scene);
+        // Creamos la capa de acceso de a datos
+        InMemoryTareaRepository inMemoryTareaRepository = new InMemoryTareaRepository();
+        TareaController tareaController = new TareaController(inMemoryTareaRepository);
+
+        // Preparamos la vista junto a su controlador
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("vistas/tarea_list.fxml"));
+        fxmlLoader.setController(tareaController);
+
+        // Mostramos la vista ya preparada
+        AnchorPane rootLayout = fxmlLoader.load();
+        stage.setScene(new Scene(rootLayout));
+        stage.setResizable(false);
         stage.show();
-    }
-
-    static void setRoot(String fxml) throws IOException {
-        scene.setRoot(loadFXML(fxml));
-    }
-
-    private static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
-        return fxmlLoader.load();
     }
 
     public static void main(String[] args) {
