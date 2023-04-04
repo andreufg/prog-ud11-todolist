@@ -23,4 +23,8 @@ public class Tarea {
     public String toString() {
         return descripcion + " " + finalizada;
     }
+
+    public boolean empiezaPor(String text) {
+        return this.descripcion.startsWith(text);
+    }
 }

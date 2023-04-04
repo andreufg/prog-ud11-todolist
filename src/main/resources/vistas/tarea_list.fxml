@@ -17,7 +17,6 @@
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                <children>
-                  <ListView fx:id="tareaListView" fixedCellSize="50.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="70.0" />
                   <HBox alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="65.0" prefWidth="200.0" style="-fx-background-color: #3d5afe;" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                      <children>
                         <ImageView fitHeight="56.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
@@ -32,12 +31,14 @@
                         </Label>
                      </children>
                   </HBox>
+                  <ListView fx:id="tareaListView" fixedCellSize="50.0" layoutY="96.0" prefHeight="319.0" prefWidth="388.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="96.0" />
+                  <TextField fx:id="searchBar" layoutX="5.0" layoutY="70.0" onKeyTyped="#searchTasks" prefHeight="27.0" prefWidth="388.0" promptText="Introduce un texto para buscar..." />
                </children>
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                <children>
-                  <TextField fx:id="nuevaTareaTextField" promptText="Texto de prueba" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="5.0" />
-                  <Button mnemonicParsing="false" prefWidth="70.0" text="Button" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="323.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                  <TextField fx:id="nuevaTareaTextField" promptText="Introduce tu nueva tarea" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="5.0" />
+                  <Button mnemonicParsing="false" onAction="#addNewTask" prefWidth="70.0" text="Añadir" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="323.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
                </children></AnchorPane>
         </items>
       </SplitPane>

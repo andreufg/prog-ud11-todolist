@@ -7,4 +7,5 @@ import java.util.ArrayList;
 public interface TareaRepository {
     ArrayList<Tarea> findAll();
     boolean save(Tarea tarea);
+    ArrayList<Tarea> findAll(String text);
 }

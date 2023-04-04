@@ -29,4 +29,16 @@ public class InMemoryTareaRepository implements TareaRepository{
     public boolean save(Tarea tarea) {
         return tareas.add(tarea);
     }
+
+    @Override
+    public ArrayList<Tarea> findAll(String text) {
+        ArrayList<Tarea>tareasFiltradas = new ArrayList<>();
+        for (Tarea tarea: tareas) {
+            if (tarea.empiezaPor(text)) {
+                tareasFiltradas.add(tarea);
+            }
+        }
+
+        return tareasFiltradas;
+    }
 }

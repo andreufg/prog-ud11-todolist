@@ -10,12 +10,17 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 
+import java.util.ArrayList;
+
 public class TareaController {
     @FXML
     private ListView<Tarea> tareaListView;
 
     @FXML
     private TextField nuevaTareaTextField;
+
+    @FXML
+    private TextField searchBar;
 
     private TareaRepository tareaRepository;
 
@@ -32,4 +37,26 @@ public class TareaController {
     private ObservableList<Tarea> getData() {
         return FXCollections.observableArrayList(tareaRepository.findAll());
     }
+
+    @FXML
+    private void addNewTask() {
+        Tarea tarea = new Tarea(
+                tareaListView.getItems().size() + 1,
+                nuevaTareaTextField.getText());
+        if (tareaRepository.save(tarea)) {
+            tareaListView.getItems().add(tarea);
+            nuevaTareaTextField.setText("");
+        }
+    }
+
+    @FXML
+    private void searchTasks() {
+
+        tareaListView.getItems().clear();
+        String texto = searchBar.getText();
+        ArrayList<Tarea> tareas = tareaRepository.findAll(texto);
+        tareaListView.getItems().addAll(tareas);
+    }
+
+
 }
