@@ -1,7 +1,9 @@
 package es.progcipfpbatoi.controlador;
 
-import es.progcipfpbatoi.modelo.entidades.Tarea;
+import es.progcipfpbatoi.exceptions.DatabaseErrorException;
+import es.progcipfpbatoi.modelo.dto.Tarea;
 import es.progcipfpbatoi.modelo.repositorios.TareaRepository;
+import es.progcipfpbatoi.util.AlertMessages;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -14,7 +16,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.Stack;
 
 public class TareaDetailController implements Initializable {
 
@@ -63,8 +64,12 @@ public class TareaDetailController implements Initializable {
 
     @FXML
     private void handleChangeInFinalizada() {
-        this.tarea.cambiarEstado();
-        this.tareaRepository.save(tarea);
+        try {
+            this.tarea.cambiarEstado();
+            this.tareaRepository.save(tarea);
+        } catch (DatabaseErrorException ex) {
+            AlertMessages.mostrarAlertError();
+        }
     }
 
     @FXML

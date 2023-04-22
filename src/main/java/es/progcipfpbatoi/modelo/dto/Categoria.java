@@ -1,4 +1,4 @@
-package es.progcipfpbatoi.modelo.entidades;
+package es.progcipfpbatoi.modelo.dto;
 
 public enum Categoria {
 

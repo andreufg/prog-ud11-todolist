@@ -1,15 +1,15 @@
-package es.progcipfpbatoi.modelo.repositorios;
+package es.progcipfpbatoi.modelo.dao;
 
-import es.progcipfpbatoi.modelo.entidades.Categoria;
-import es.progcipfpbatoi.modelo.entidades.Tarea;
+import es.progcipfpbatoi.modelo.dto.Categoria;
+import es.progcipfpbatoi.modelo.dto.Tarea;
 
 import java.util.ArrayList;
 
-public class InMemoryTareaRepository implements TareaRepository{
+public class InMemoryTareaDAO implements TareaDAO {
 
     private ArrayList<Tarea> tareas;
 
-    public InMemoryTareaRepository() {
+    public InMemoryTareaDAO() {
         this.tareas = new ArrayList<>();
         init();
     }

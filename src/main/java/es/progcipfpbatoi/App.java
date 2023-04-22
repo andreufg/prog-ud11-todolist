@@ -2,15 +2,10 @@ package es.progcipfpbatoi;
 
 import es.progcipfpbatoi.controlador.ChangeScene;
 import es.progcipfpbatoi.controlador.TareaController;
-import es.progcipfpbatoi.controlador.TareaDetailController;
-import es.progcipfpbatoi.modelo.entidades.Categoria;
-import es.progcipfpbatoi.modelo.entidades.Tarea;
-import es.progcipfpbatoi.modelo.repositorios.InMemoryTareaRepository;
+import es.progcipfpbatoi.modelo.dao.FileTareaDAO;
+import es.progcipfpbatoi.modelo.dao.InMemoryTareaDAO;
+import es.progcipfpbatoi.modelo.repositorios.TareaRepository;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -22,18 +17,21 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        // Creamos la capa de acceso de a datos
-        InMemoryTareaRepository inMemoryTareaRepository = new InMemoryTareaRepository();
-        TareaController tareaController = new TareaController(inMemoryTareaRepository);
-        ChangeScene.change(stage, tareaController, "/vistas/tarea_list.fxml");
+        // Creación del el DAO correspondiente. Aquí se selecciona el tipo de persistencia que utilizará la app
+        // InMemoryTareaDAO inMemoryTareaDAO = new InMemoryTareaDAO();
+        FileTareaDAO fileTareaDAO = new FileTareaDAO();
 
-       /* Tarea tarea = new Tarea(6, "Sacar la basura", Categoria.HOGAR);
-        TareaDetailController tareaDetailController = new TareaDetailController(tarea, inMemoryTareaRepository);
-        ChangeScene.change(stage, tareaDetailController, "/vistas/tarea_detail.fxml");*/
+        // Creación del repositorio que será el que interactuará con el controlador.
+        TareaRepository tareaRepository = new TareaRepository(fileTareaDAO);
+
+        // Se crea al controlador proporcionando el/los repositorio/s que necesita
+        TareaController tareaController = new TareaController(tareaRepository);
+
+        // Muestra de la escena principal.
+        ChangeScene.change(stage, tareaController, "/vistas/tarea_list.fxml");
     }
 
     public static void main(String[] args) {
         launch();
     }
-
 }
