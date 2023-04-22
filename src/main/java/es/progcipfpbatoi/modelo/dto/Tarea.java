@@ -2,6 +2,7 @@ package es.progcipfpbatoi.modelo.dto;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class Tarea {
 
@@ -15,23 +16,24 @@ public class Tarea {
 
     private Categoria categoria;
 
-    public Tarea(int id, String descripcion, Categoria categoria) {
+    public Tarea(int id, String descripcion, LocalDateTime fechaAlta, boolean finalizada, Categoria categoria) {
         this.id = id;
         this.descripcion = descripcion;
-        this.fechaAlta = LocalDateTime.now();
-        this.finalizada = false;
+        this.fechaAlta = fechaAlta;
+        this.finalizada = finalizada;
         this.categoria = categoria;
     }
 
-    @Override
-    public String toString() {
-        return descripcion + " " + finalizada;
+    public Tarea(int id, String descripcion, Categoria categoria) {
+        this(id, descripcion, LocalDateTime.now(), false, categoria);
     }
 
-    public boolean empiezaPor(String text) {
-        return this.descripcion.startsWith(text);
+    public Tarea(int id)  {
+        this(id, null, null, false, null);
     }
-
+    public int getId() {
+        return id;
+    }
     public String getDescripcion() {
         return descripcion;
     }
@@ -50,5 +52,26 @@ public class Tarea {
 
     public LocalDate getFechaAltaSinTiempo() {
         return this.fechaAlta.toLocalDate();
+    }
+    @Override
+    public String toString() {
+        return descripcion + " " + finalizada;
+    }
+
+    public boolean empiezaPor(String text) {
+        return this.descripcion.startsWith(text);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Tarea tarea = (Tarea) o;
+        return id == tarea.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

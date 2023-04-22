@@ -68,15 +68,14 @@ public class TareaDetailController implements Initializable {
             this.tarea.cambiarEstado();
             this.tareaRepository.save(tarea);
         } catch (DatabaseErrorException ex) {
-            AlertMessages.mostrarAlertError();
+            AlertMessages.mostrarAlertError("No se ha podido guardar la tarea. Error en el acceso a la base de datos.");
         }
     }
 
     @FXML
     private void handleButtonBack(ActionEvent event) {
         try {
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            ChangeScene.change(stage, controladorPadre, vistaPadre);
+            ChangeScene.change(event, controladorPadre, vistaPadre);
         } catch (IOException e) {
             e.printStackTrace();
         }

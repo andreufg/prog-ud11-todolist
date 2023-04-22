@@ -1,6 +1,7 @@
 package es.progcipfpbatoi.modelo.repositorios;
 
 import es.progcipfpbatoi.exceptions.DatabaseErrorException;
+import es.progcipfpbatoi.exceptions.NotFoundException;
 import es.progcipfpbatoi.modelo.dao.TareaDAO;
 import es.progcipfpbatoi.modelo.dto.Tarea;
 
@@ -20,6 +21,10 @@ public class TareaRepository {
 
     public ArrayList<Tarea> findAll(String text) {
         return tareaDAO.findAll(text);
+    }
+
+    public Tarea findById(int id) throws NotFoundException {
+        return tareaDAO.getById(id);
     }
 
     public boolean save(Tarea tarea) throws DatabaseErrorException {

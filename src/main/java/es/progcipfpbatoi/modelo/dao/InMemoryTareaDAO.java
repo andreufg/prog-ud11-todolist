@@ -1,5 +1,6 @@
 package es.progcipfpbatoi.modelo.dao;
 
+import es.progcipfpbatoi.exceptions.NotFoundException;
 import es.progcipfpbatoi.modelo.dto.Categoria;
 import es.progcipfpbatoi.modelo.dto.Tarea;
 
@@ -27,14 +28,14 @@ public class InMemoryTareaDAO implements TareaDAO {
     }
 
     public boolean save(Tarea tarea) {
-        int index = tareas.indexOf(tarea);
+        int indiceTarea = tareas.indexOf(tarea);
 
-        if (index == -1) {
+        if (indiceTarea == -1) {
             return this.tareas.add(tarea);
-        } else {
-            this.tareas.set(index, tarea);
-            return true;
         }
+
+        this.tareas.set(indiceTarea, tarea);
+        return true;
     }
 
     @Override
@@ -47,5 +48,16 @@ public class InMemoryTareaDAO implements TareaDAO {
         }
 
         return tareasFiltradas;
+    }
+
+    @Override
+    public Tarea getById(int id) throws NotFoundException {
+        int indiceTarea = tareas.indexOf(new Tarea(id));
+
+        if (indiceTarea != -1) {
+            return tareas.get(indiceTarea);
+        }
+
+        throw new NotFoundException("Tarea no encontrada");
     }
 }

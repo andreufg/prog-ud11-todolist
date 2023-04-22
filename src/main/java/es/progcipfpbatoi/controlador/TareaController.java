@@ -60,7 +60,7 @@ public class TareaController implements Initializable {
                 categorySelector.getSelectionModel().clearSelection();
             }
         }catch (DatabaseErrorException ex) {
-            AlertMessages.mostrarAlertError();
+            AlertMessages.mostrarAlertError("No se ha podido guardar la tarea. Error en el acceso a la base de datos.");
         }
     }
 
@@ -84,11 +84,10 @@ public class TareaController implements Initializable {
             tareaListView.refresh();
         }*/
         try {
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Tarea tarea = tareaListView.getSelectionModel().getSelectedItem();
             TareaDetailController tareaDetailController = new TareaDetailController(
                     tarea, tareaRepository, this, "/vistas/tarea_list.fxml");
-            ChangeScene.change(stage, tareaDetailController, "/vistas/tarea_detail.fxml");
+            ChangeScene.change(event, tareaDetailController, "/vistas/tarea_detail.fxml");
         } catch (IOException ex) {
             ex.printStackTrace();
         }
