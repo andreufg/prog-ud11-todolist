@@ -39,7 +39,7 @@ public class FileTareaDAO implements TareaDAO{
     }
 
     @Override
-    public Tarea getById(int id) throws NotFoundException {
+    public Tarea getById(int id) throws NotFoundException, DatabaseErrorException {
         try {
             FileReader fileReader = new FileReader(this.file);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
@@ -62,7 +62,7 @@ public class FileTareaDAO implements TareaDAO{
             } while (true);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new NotFoundException("Ocurrió un error en el acceso a la base de datos");
+            throw new DatabaseErrorException("Ocurrió un error en el acceso a la base de datos");
         }
     }
 

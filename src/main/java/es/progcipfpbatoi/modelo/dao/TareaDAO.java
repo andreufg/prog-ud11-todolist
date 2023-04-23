@@ -25,7 +25,7 @@ public interface TareaDAO {
      * @return
      * @throws NotFoundException
      */
-    Tarea getById(int id) throws NotFoundException;
+    Tarea getById(int id) throws NotFoundException, DatabaseErrorException;
 
     /**
      * Almacena la tarea o la actualiza en caso de existir
