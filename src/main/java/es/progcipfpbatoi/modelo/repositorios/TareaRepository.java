@@ -23,7 +23,7 @@ public class TareaRepository {
         return tareaDAO.findAll(text);
     }
 
-    public Tarea findById(int id) throws NotFoundException {
+    public Tarea getById(int id) throws DatabaseErrorException, NotFoundException {
         return tareaDAO.getById(id);
     }
 
