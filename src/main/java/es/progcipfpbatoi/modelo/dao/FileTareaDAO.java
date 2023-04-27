@@ -30,11 +30,13 @@ public class FileTareaDAO implements TareaDAO{
 
     @Override
     public ArrayList<Tarea> findAll() {
+        // Por implementar
         return null;
     }
 
     @Override
     public ArrayList<Tarea> findAll(String text) {
+        // Por implementar
         return null;
     }
 
@@ -68,6 +70,7 @@ public class FileTareaDAO implements TareaDAO{
 
     @Override
     public boolean save(Tarea tarea) {
+        // Por implementar
         return false;
     }
 }
