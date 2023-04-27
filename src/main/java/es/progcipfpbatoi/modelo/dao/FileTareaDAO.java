@@ -40,9 +40,9 @@ public class FileTareaDAO implements TareaDAO{
 
     @Override
     public Tarea getById(int id) throws NotFoundException, DatabaseErrorException {
-        try {
-            FileReader fileReader = new FileReader(this.file);
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
+        try (FileReader fileReader = new FileReader(this.file);
+             BufferedReader bufferedReader = new BufferedReader(fileReader)) {
+
             do {
                 String register = bufferedReader.readLine();
                 if (register == null) {
