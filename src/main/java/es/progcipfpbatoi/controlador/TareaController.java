@@ -1,6 +1,7 @@
 package es.progcipfpbatoi.controlador;
 
 import es.progcipfpbatoi.exceptions.DatabaseErrorException;
+import es.progcipfpbatoi.exceptions.NotFoundException;
 import es.progcipfpbatoi.modelo.dto.Categoria;
 import es.progcipfpbatoi.modelo.dto.Tarea;
 import es.progcipfpbatoi.modelo.repositorios.TareaRepository;
@@ -42,19 +43,26 @@ public class TareaController implements Initializable {
     }
 
     private ObservableList<Tarea> getData() {
-        return FXCollections.observableArrayList(tareaRepository.findAll());
+        try {
+            return FXCollections.observableArrayList(tareaRepository.findAll());
+        }catch (DatabaseErrorException ex) {
+            AlertMessages.mostrarAlertError(ex.getMessage());
+            return null;
+        }
     }
 
     @FXML
     private void addNewTask() {
-        Categoria categoria = categorySelector.getSelectionModel().getSelectedItem();
-
-        Tarea tarea = new Tarea(
-                tareaListView.getItems().size() + 1,
-                nuevaTareaTextField.getText(),
-                categoria);
         try {
-            if (tareaRepository.save(tarea)) {
+            Categoria categoria = categorySelector.getSelectionModel().getSelectedItem();
+            String descripcion = nuevaTareaTextField.getText();
+            if (categoria == null) {
+                AlertMessages.mostrarAlertError("Debe seleccionar una categoría");
+            } else if (descripcion.equals("")) {
+                AlertMessages.mostrarAlertError("Debe introducir una descripción");
+            } else {
+                Tarea tarea = new Tarea(getNewTaskIndex(), nuevaTareaTextField.getText(), categoria);
+                tareaRepository.save(tarea);
                 tareaListView.getItems().add(tarea);
                 nuevaTareaTextField.setText("");
                 categorySelector.getSelectionModel().clearSelection();
@@ -64,15 +72,26 @@ public class TareaController implements Initializable {
         }
     }
 
-
+    private int getNewTaskIndex() {
+        if (tareaListView.getItems().size() == 0) {
+            return 0;
+        } else {
+            Tarea ultimaTarea = tareaListView.getItems().get(tareaListView.getItems().size() - 1);
+            return ultimaTarea.getId() + 1;
+        }
+    }
 
     @FXML
     private void searchTasks() {
 
-        tareaListView.getItems().clear();
-        String texto = searchBar.getText();
-        ArrayList<Tarea> tareas = tareaRepository.findAll(texto);
-        tareaListView.getItems().addAll(tareas);
+        try {
+            tareaListView.getItems().clear();
+            String texto = searchBar.getText();
+            ArrayList<Tarea> tareas = tareaRepository.findAll(texto);
+            tareaListView.getItems().addAll(tareas);
+        } catch (DatabaseErrorException ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 
     @FXML

@@ -5,10 +5,7 @@ import es.progcipfpbatoi.exceptions.NotFoundException;
 import es.progcipfpbatoi.modelo.dto.Categoria;
 import es.progcipfpbatoi.modelo.dto.Tarea;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -22,6 +19,8 @@ public class FileTareaDAO implements TareaDAO{
     private static final int FINALIZADO = 3;
     private static final int CATEGORIA = 4;
 
+    private static final String FIELD_SEPARATOR = ";";
+
     private File file;
 
     public FileTareaDAO() {
@@ -29,15 +28,60 @@ public class FileTareaDAO implements TareaDAO{
     }
 
     @Override
-    public ArrayList<Tarea> findAll() {
-        // Por implementar
-        return null;
+    public ArrayList<Tarea> findAll() throws DatabaseErrorException{
+        try {
+            ArrayList<Tarea> tareas = new ArrayList<>();
+            try (BufferedReader bufferedReader = getReader()) {
+                do {
+                    String register = bufferedReader.readLine();
+                    if (register == null) {
+                        return tareas;
+                    }
+                    tareas.add(getTaskFromRegister(register));
+                } while (true);
+            }
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+            throw new DatabaseErrorException("Error en el acceso a la base de datos de tareas");
+        }
+
     }
 
+    private BufferedReader getReader() throws IOException {
+        return new BufferedReader(new FileReader(file));
+    }
+
+    private Tarea getTaskFromRegister(String register) {
+        String[] fields = register.split(FIELD_SEPARATOR);
+        int codigo = Integer.parseInt(fields[ID]);
+        String descripcion = fields[DESCRIPCION];
+        LocalDateTime fecha = LocalDateTime.parse(fields[FECHA], DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        boolean finalizado = Boolean.parseBoolean(fields[FINALIZADO]);
+        Categoria categoria = Categoria.parse(fields[CATEGORIA]);
+        return new Tarea(codigo, descripcion, fecha, finalizado, categoria);
+    }
+
+    private String getRegisterFromTask(Tarea tarea) {
+        String[] fields = new String[5];
+        fields[ID] = String.valueOf(tarea.getId());
+        fields[DESCRIPCION] = String.valueOf(tarea.getDescripcion());
+        fields[FECHA] = tarea.getFechaAltaFormatted();
+        fields[FINALIZADO] =  String.valueOf(tarea.isFinalizada());
+        fields[CATEGORIA] =  tarea.getCategoria().toString();
+        return String.join(FIELD_SEPARATOR, fields);
+    }
+
+
     @Override
-    public ArrayList<Tarea> findAll(String text) {
-        // Por implementar
-        return null;
+    public ArrayList<Tarea> findAll(String text) throws DatabaseErrorException{
+        ArrayList<Tarea> tareasFiltradas = new ArrayList<>();
+        for (Tarea tarea: findAll()) {
+            if (tarea.empiezaPor(text)) {
+                tareasFiltradas.add(tarea);
+            }
+        }
+
+        return tareasFiltradas;
     }
 
     @Override
@@ -50,13 +94,7 @@ public class FileTareaDAO implements TareaDAO{
                 if (register == null) {
                     throw new NotFoundException("Tarea no encontrada");
                 } else if (!register.isBlank()) {
-                    String[] fields = register.split(";");
-                    int codigo = Integer.parseInt(fields[ID]);
-                    String descripcion = fields[DESCRIPCION];
-                    LocalDateTime fecha = LocalDateTime.parse(fields[FECHA], DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-                    boolean finalizado = Boolean.parseBoolean(fields[FINALIZADO]);
-                    Categoria categoria = Categoria.parse(fields[CATEGORIA]);
-                    Tarea tarea = new Tarea(codigo, descripcion, fecha, finalizado, categoria);
+                    Tarea tarea = getTaskFromRegister(register);
                     if (tarea.getId() == id) {
                         return tarea;
                     }
@@ -69,8 +107,64 @@ public class FileTareaDAO implements TareaDAO{
     }
 
     @Override
-    public boolean save(Tarea tarea) {
-        // Por implementar
-        return false;
+    public Tarea findById(int id) throws DatabaseErrorException {
+        try {
+            return getById(id);
+        } catch (NotFoundException ex) {
+            return null;
+        }
     }
+
+    @Override
+    public void save(Tarea tarea) throws DatabaseErrorException{
+        try {
+            if (findById(tarea.getId()) == null) {
+                append(tarea);
+            }
+            else {
+                update(tarea);
+            }
+        } catch (IOException ex) {
+            throw new DatabaseErrorException(ex.getMessage());
+        }
+    }
+
+    private void append(Tarea tarea) throws IOException {
+        try (BufferedWriter bufferedWriter = getWriter(true)) {
+            bufferedWriter.write(getRegisterFromTask(tarea));
+            bufferedWriter.newLine();
+        }
+    }
+
+    private void update(Tarea tarea) throws DatabaseErrorException{
+        updateOrRemove(tarea, true);
+    }
+
+    public void remove(Tarea tarea) throws DatabaseErrorException{
+        updateOrRemove(tarea, false);
+    }
+
+    private void updateOrRemove(Tarea tarea, boolean update) throws DatabaseErrorException {
+        ArrayList<Tarea> tareas = findAll();
+        try (BufferedWriter bufferedWriter = getWriter(false)) {
+            for (Tarea tareaItem : tareas) {
+                if (!tareaItem.equals(tarea)) {
+                    bufferedWriter.write(getRegisterFromTask(tareaItem));
+                    bufferedWriter.newLine();
+                } else if (update) {
+                    bufferedWriter.write(getRegisterFromTask(tarea));
+                    bufferedWriter.newLine();
+                }
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            throw new DatabaseErrorException("Error en el acceso a la base de datos de tareas");
+        }
+    }
+
+    private BufferedWriter getWriter(boolean append) throws IOException {
+        return new BufferedWriter(new FileWriter(file, append));
+    }
+
+
 }

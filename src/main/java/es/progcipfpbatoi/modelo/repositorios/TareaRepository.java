@@ -15,11 +15,11 @@ public class TareaRepository {
         this.tareaDAO = tareaDAO;
     }
 
-    public ArrayList<Tarea> findAll() {
+    public ArrayList<Tarea> findAll() throws DatabaseErrorException{
         return tareaDAO.findAll();
     }
 
-    public ArrayList<Tarea> findAll(String text) {
+    public ArrayList<Tarea> findAll(String text) throws DatabaseErrorException{
         return tareaDAO.findAll(text);
     }
 
@@ -27,7 +27,11 @@ public class TareaRepository {
         return tareaDAO.getById(id);
     }
 
-    public boolean save(Tarea tarea) throws DatabaseErrorException {
-        return tareaDAO.save(tarea);
+    public void save(Tarea tarea) throws DatabaseErrorException {
+        tareaDAO.save(tarea);
+    }
+
+    public void remove(Tarea tarea) throws NotFoundException, DatabaseErrorException {
+        tareaDAO.remove(tarea);
     }
 }

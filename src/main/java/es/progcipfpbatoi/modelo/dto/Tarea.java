@@ -2,6 +2,7 @@ package es.progcipfpbatoi.modelo.dto;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class Tarea {
@@ -52,6 +53,12 @@ public class Tarea {
 
     public LocalDate getFechaAltaSinTiempo() {
         return this.fechaAlta.toLocalDate();
+    }
+
+    public String getFechaAltaFormatted() {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return dateTimeFormatter.format(this.fechaAlta);
+
     }
     @Override
     public String toString() {

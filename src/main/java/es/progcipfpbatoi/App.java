@@ -26,12 +26,12 @@ public class App extends Application {
         TareaRepository tareaRepository = new TareaRepository(fileTareaDAO);
 
         // Se crea al controlador proporcionando el/los repositorio/s que necesita
-        //TareaController tareaController = new TareaController(tareaRepository);
+        TareaController tareaController = new TareaController(tareaRepository);
         // Muestra de la escena principal.
-        //ChangeScene.change(stage, tareaController, "/vistas/tarea_list.fxml");
+        ChangeScene.change(stage, tareaController, "/vistas/tarea_list.fxml");
 
-        TareaSearchController tareaSearchController = new TareaSearchController(tareaRepository);
-        ChangeScene.change(stage, tareaSearchController, "/vistas/tarea_search.fxml");
+        //TareaSearchController tareaSearchController = new TareaSearchController(tareaRepository);
+        //ChangeScene.change(stage, tareaSearchController, "/vistas/tarea_search.fxml");
     }
 
     public static void main(String[] args) {

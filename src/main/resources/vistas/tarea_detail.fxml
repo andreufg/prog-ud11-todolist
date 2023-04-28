@@ -67,6 +67,7 @@
                <children>
                   <CheckBox fx:id="checkBoxFinalizada" mnemonicParsing="false" onAction="#handleChangeInFinalizada" text="Realizada" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="20.0" />
                   <Button mnemonicParsing="false" onAction="#handleButtonBack" prefHeight="24.0" prefWidth="81.0" text="Atrás" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="20.0" />
+                  <Button layoutX="199.0" layoutY="20.0" mnemonicParsing="false" onAction="#removeTask" prefHeight="24.0" prefWidth="81.0" text="Eliminar" />
                </children></AnchorPane>
         </items>
       </SplitPane>

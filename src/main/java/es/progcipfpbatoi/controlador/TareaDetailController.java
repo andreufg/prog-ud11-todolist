@@ -1,6 +1,7 @@
 package es.progcipfpbatoi.controlador;
 
 import es.progcipfpbatoi.exceptions.DatabaseErrorException;
+import es.progcipfpbatoi.exceptions.NotFoundException;
 import es.progcipfpbatoi.modelo.dto.Tarea;
 import es.progcipfpbatoi.modelo.repositorios.TareaRepository;
 import es.progcipfpbatoi.util.AlertMessages;
@@ -10,6 +11,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -39,7 +41,6 @@ public class TareaDetailController implements Initializable {
             TareaRepository tareaRepository,
             Initializable controladorPadre,
             String vistaPadre) {
-
         this.tarea = tarea;
         this.tareaRepository = tareaRepository;
         this.controladorPadre = controladorPadre;
@@ -79,7 +80,19 @@ public class TareaDetailController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
+    @FXML
+    private void removeTask(ActionEvent event) {
+        try {
+            this.tareaRepository.remove(tarea);
+            ChangeScene.change(event, controladorPadre, vistaPadre);
+        } catch (NotFoundException | DatabaseErrorException ex) {
+            ex.printStackTrace();
+            AlertMessages.mostrarAlertError(ex.getMessage());
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
 
