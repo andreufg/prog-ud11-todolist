@@ -44,8 +44,8 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.8.0</version>
                     <configuration>
-                        <release>11</release>
-                        <source>1.11</source>
+                        <release>14</release>
+                        <source>1.14</source>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -90,5 +90,15 @@
                 </plugin>
             </plugins>
         </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>14</source>
+                    <target>14</target>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
 </project>
