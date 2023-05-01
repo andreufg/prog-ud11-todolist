@@ -96,12 +96,6 @@ public class TareaController implements Initializable {
 
     @FXML
     private void handleSelectedItem(MouseEvent event) {
-        /*
-        tarea.cambiarEstado();
-        if (tareaRepository.save(tarea)) {
-            tareaListView.getSelectionModel().clearSelection();
-            tareaListView.refresh();
-        }*/
         try {
             Tarea tarea = tareaListView.getSelectionModel().getSelectedItem();
             TareaDetailController tareaDetailController = new TareaDetailController(
@@ -114,7 +108,6 @@ public class TareaController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        System.out.println(nuevaTareaTextField.getPromptText());
         tareaListView.setItems(getData());
         tareaListView.setCellFactory((ListView<Tarea> l) -> new TaskListViewCellController());
         categorySelector.setItems(FXCollections.observableArrayList(Categoria.values()));
