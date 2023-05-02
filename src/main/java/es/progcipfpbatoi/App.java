@@ -3,6 +3,7 @@ package es.progcipfpbatoi;
 import es.progcipfpbatoi.controlador.ChangeScene;
 import es.progcipfpbatoi.controlador.TareaController;
 import es.progcipfpbatoi.controlador.TareaSearchController;
+import es.progcipfpbatoi.modelo.dao.FileCategoriaDAO;
 import es.progcipfpbatoi.modelo.dao.FileTareaDAO;
 import es.progcipfpbatoi.modelo.dao.InMemoryTareaDAO;
 import es.progcipfpbatoi.modelo.repositorios.TareaRepository;
@@ -19,11 +20,13 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         // Creación del el DAO correspondiente. Aquí se selecciona el tipo de persistencia que utilizará la app
-        // InMemoryTareaDAO inMemoryTareaDAO = new InMemoryTareaDAO();
+        //InMemoryTareaDAO inMemoryTareaDAO = new InMemoryTareaDAO();
         FileTareaDAO fileTareaDAO = new FileTareaDAO();
+        FileCategoriaDAO fileCategoriaDAO = new FileCategoriaDAO();
+
 
         // Creación del repositorio que será el que interactuará con el controlador.
-        TareaRepository tareaRepository = new TareaRepository(fileTareaDAO);
+        TareaRepository tareaRepository = new TareaRepository(fileTareaDAO, fileCategoriaDAO);
 
         // Se crea al controlador proporcionando el/los repositorio/s que necesita
         TareaController tareaController = new TareaController(tareaRepository);

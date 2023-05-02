@@ -81,4 +81,8 @@ public class Tarea {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
+    }
 }

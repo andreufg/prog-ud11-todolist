@@ -2,12 +2,15 @@ package es.progcipfpbatoi.modelo.dao;
 
 import es.progcipfpbatoi.exceptions.DatabaseErrorException;
 import es.progcipfpbatoi.exceptions.NotFoundException;
+import es.progcipfpbatoi.modelo.dto.Categoria;
 import es.progcipfpbatoi.modelo.dto.Tarea;
+import es.progcipfpbatoi.modelo.dto.Tipo;
 
 import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class FileTareaDAO implements TareaDAO{
 
@@ -56,7 +59,8 @@ public class FileTareaDAO implements TareaDAO{
         String descripcion = fields[DESCRIPCION];
         LocalDateTime fecha = LocalDateTime.parse(fields[FECHA], DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         boolean finalizado = Boolean.parseBoolean(fields[FINALIZADO]);
-        Categoria categoria = Categoria.parse(fields[CATEGORIA]);
+        int idCategoria = Integer.parseInt(fields[CATEGORIA]);
+        Categoria categoria = new Categoria(idCategoria);
         return new Tarea(codigo, descripcion, fecha, finalizado, categoria);
     }
 
@@ -66,7 +70,7 @@ public class FileTareaDAO implements TareaDAO{
         fields[DESCRIPCION] = String.valueOf(tarea.getDescripcion());
         fields[FECHA] = tarea.getFechaAltaFormatted();
         fields[FINALIZADO] =  String.valueOf(tarea.isFinalizada());
-        fields[CATEGORIA] =  tarea.getCategoria().toString();
+        fields[CATEGORIA] =  String.valueOf(tarea.getCategoria().getId());
         return String.join(FIELD_SEPARATOR, fields);
     }
 

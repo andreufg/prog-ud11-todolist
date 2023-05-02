@@ -2,7 +2,10 @@ package es.progcipfpbatoi.modelo.dao;
 
 import es.progcipfpbatoi.exceptions.DatabaseErrorException;
 import es.progcipfpbatoi.exceptions.NotFoundException;
+import es.progcipfpbatoi.modelo.dto.Categoria;
+import es.progcipfpbatoi.modelo.dto.Prioridad;
 import es.progcipfpbatoi.modelo.dto.Tarea;
+import es.progcipfpbatoi.modelo.dto.Tipo;
 
 import java.util.ArrayList;
 
@@ -16,10 +19,10 @@ public class InMemoryTareaDAO implements TareaDAO {
     }
 
     private void init() {
-        this.tareas.add(new Tarea(1, "Sacar al perro", Categoria.HOGAR));
-        this.tareas.add(new Tarea(2, "Actividad final de programación", Categoria.CLASE));
-        this.tareas.add(new Tarea(3, "Hacer la comida", Categoria.HOGAR));
-        this.tareas.add(new Tarea(4, "Ir al parque", Categoria.JUGAR));
+        this.tareas.add(new Tarea(1, "Sacar al perro", new Categoria(1, Tipo.HOGAR, Prioridad.ALTA)));
+        this.tareas.add(new Tarea(2, "Actividad final de programación", new Categoria(2, Tipo.CLASE, Prioridad.NORMAL)));
+        this.tareas.add(new Tarea(3, "Hacer la comida", new Categoria(3, Tipo.HOGAR, Prioridad.BAJA)));
+        this.tareas.add(new Tarea(4, "Ir al parque", new Categoria(4, Tipo.HOGAR, Prioridad.BAJA)));
     }
 
     @Override

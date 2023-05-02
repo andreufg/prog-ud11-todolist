@@ -1,7 +1,11 @@
 package es.progcipfpbatoi.controlador;
 
 import es.progcipfpbatoi.exceptions.DatabaseErrorException;
+import es.progcipfpbatoi.exceptions.NotFoundException;
+import es.progcipfpbatoi.modelo.dto.Categoria;
+import es.progcipfpbatoi.modelo.dto.Prioridad;
 import es.progcipfpbatoi.modelo.dto.Tarea;
+import es.progcipfpbatoi.modelo.dto.Tipo;
 import es.progcipfpbatoi.modelo.repositorios.TareaRepository;
 import es.progcipfpbatoi.util.AlertMessages;
 import javafx.collections.FXCollections;
@@ -26,7 +30,10 @@ public class TareaController implements Initializable {
     private TextField nuevaTareaTextField;
 
     @FXML
-    private ComboBox<Categoria> categorySelector;
+    private ComboBox<Tipo> typeSelector;
+
+    @FXML
+    private ComboBox<Prioridad> prioritySelector;
 
     @FXML
     private TextField searchBar;
@@ -39,7 +46,7 @@ public class TareaController implements Initializable {
 
     private ObservableList<Tarea> getData() {
         try {
-            return FXCollections.observableArrayList(tareaRepository.findAll());
+            return FXCollections.observableArrayList(tareaRepository.findAllWithCategories());
         }catch (DatabaseErrorException ex) {
             AlertMessages.mostrarAlertError(ex.getMessage());
             return null;
@@ -49,20 +56,25 @@ public class TareaController implements Initializable {
     @FXML
     private void addNewTask() {
         try {
-            Categoria categoria = categorySelector.getSelectionModel().getSelectedItem();
+            Tipo tipo = typeSelector.getSelectionModel().getSelectedItem();
+            Prioridad prioridad = prioritySelector.getSelectionModel().getSelectedItem();
             String descripcion = nuevaTareaTextField.getText();
-            if (categoria == null) {
+            if (tipo == null) {
                 AlertMessages.mostrarAlertError("Debe seleccionar una categoría");
             } else if (descripcion.equals("")) {
                 AlertMessages.mostrarAlertError("Debe introducir una descripción");
             } else {
+                Categoria categoria = tareaRepository.getCategoryByTypeAndPriority(tipo, prioridad);
                 Tarea tarea = new Tarea(getNewTaskIndex(), nuevaTareaTextField.getText(), categoria);
                 tareaRepository.save(tarea);
                 tareaListView.getItems().add(tarea);
                 nuevaTareaTextField.setText("");
-                categorySelector.getSelectionModel().clearSelection();
+                typeSelector.getSelectionModel().clearSelection();
             }
-        }catch (DatabaseErrorException ex) {
+        } catch (NotFoundException ex) {
+            AlertMessages.mostrarAlertError(ex.getMessage());
+        }
+        catch (DatabaseErrorException ex) {
             AlertMessages.mostrarAlertError("No se ha podido guardar la tarea. Error en el acceso a la base de datos.");
         }
     }
@@ -105,6 +117,7 @@ public class TareaController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         tareaListView.setItems(getData());
         tareaListView.setCellFactory((ListView<Tarea> l) -> new TaskListViewCellController());
-        categorySelector.setItems(FXCollections.observableArrayList(Categoria.values()));
+        typeSelector.setItems(FXCollections.observableArrayList(Tipo.values()));
+        prioritySelector.setItems(FXCollections.observableArrayList(Prioridad.values()));
     }
 }
