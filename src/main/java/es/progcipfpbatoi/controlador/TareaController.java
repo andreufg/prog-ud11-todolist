@@ -46,6 +46,7 @@ public class TareaController implements Initializable {
         try {
             return FXCollections.observableArrayList(tareaRepository.findAll());
         }catch (DatabaseErrorException ex) {
+            ex.printStackTrace();
             AlertMessages.mostrarAlertError(ex.getMessage());
             return null;
         }
@@ -68,6 +69,7 @@ public class TareaController implements Initializable {
                 categorySelector.getSelectionModel().clearSelection();
             }
         }catch (DatabaseErrorException ex) {
+            ex.printStackTrace();
             AlertMessages.mostrarAlertError("No se ha podido guardar la tarea. Error en el acceso a la base de datos.");
         }
     }
@@ -90,7 +92,8 @@ public class TareaController implements Initializable {
             ArrayList<Tarea> tareas = tareaRepository.findAll(texto);
             tareaListView.getItems().addAll(tareas);
         } catch (DatabaseErrorException ex) {
-            System.out.println(ex.getMessage());
+            ex.printStackTrace();
+            AlertMessages.mostrarAlertError(ex.getMessage());
         }
     }
 
