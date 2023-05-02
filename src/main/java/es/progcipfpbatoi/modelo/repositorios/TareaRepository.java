@@ -10,7 +10,6 @@ import es.progcipfpbatoi.modelo.dto.Tarea;
 import es.progcipfpbatoi.modelo.dto.Tipo;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class TareaRepository {
 
@@ -29,7 +28,7 @@ public class TareaRepository {
     public ArrayList<Tarea> findAllWithCategories() throws DatabaseErrorException{
         ArrayList<Tarea> tareas = tareaDAO.findAll();
         for (Tarea tarea: tareas) {
-            setCategoriatoTarea(tarea);
+            setCategorytoTask(tarea);
         }
         return tareas;
     }
@@ -44,11 +43,11 @@ public class TareaRepository {
 
     public Tarea getByIdWithCategory(int id) throws DatabaseErrorException, NotFoundException {
         Tarea tarea = tareaDAO.getById(id);
-        setCategoriatoTarea(tarea);
+        setCategorytoTask(tarea);
         return tarea;
     }
 
-    private void setCategoriatoTarea(Tarea tarea) throws DatabaseErrorException {
+    private void setCategorytoTask(Tarea tarea) throws DatabaseErrorException {
         Categoria categoria = categoriaDAO.findById(tarea.getCategoria().getId());
         tarea.setCategoria(categoria);
     }
