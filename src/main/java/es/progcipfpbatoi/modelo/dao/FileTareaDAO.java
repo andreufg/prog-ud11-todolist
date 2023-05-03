@@ -119,7 +119,7 @@ public class FileTareaDAO implements TareaDAO{
     }
 
     @Override
-    public void save(Tarea tarea) throws DatabaseErrorException{
+    public Tarea save(Tarea tarea) throws DatabaseErrorException{
         try {
             if (findById(tarea.getId()) == null) {
                 append(tarea);
@@ -127,6 +127,8 @@ public class FileTareaDAO implements TareaDAO{
             else {
                 update(tarea);
             }
+
+            return tarea;
         } catch (IOException ex) {
             throw new DatabaseErrorException(ex.getMessage());
         }

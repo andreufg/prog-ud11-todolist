@@ -40,7 +40,7 @@ public interface TareaDAO {
      * @return
      * @throws DatabaseErrorException
      */
-    void save(Tarea tarea) throws DatabaseErrorException;
+    Tarea save(Tarea tarea) throws DatabaseErrorException;
 
     void remove(Tarea tarea) throws DatabaseErrorException, NotFoundException;
 }

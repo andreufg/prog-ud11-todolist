@@ -21,10 +21,6 @@ public class TareaRepository {
         this.categoriaDAO = categoriaDAO;
     }
 
-    public ArrayList<Tarea> findAll() throws DatabaseErrorException{
-        return tareaDAO.findAll();
-    }
-
     public ArrayList<Tarea> findAllWithCategories() throws DatabaseErrorException{
         ArrayList<Tarea> tareas = tareaDAO.findAll();
         for (Tarea tarea: tareas) {

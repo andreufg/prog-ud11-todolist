@@ -30,7 +30,7 @@ public class InMemoryTareaDAO implements TareaDAO {
         return tareas;
     }
 
-    public void save(Tarea tarea) {
+    public Tarea save(Tarea tarea) {
         int indiceTarea = tareas.indexOf(tarea);
 
         if (indiceTarea == -1) {
@@ -38,6 +38,7 @@ public class InMemoryTareaDAO implements TareaDAO {
         }
 
         this.tareas.set(indiceTarea, tarea);
+        return tarea;
     }
 
     @Override

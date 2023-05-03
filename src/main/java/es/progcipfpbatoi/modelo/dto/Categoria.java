@@ -40,4 +40,8 @@ public class Categoria {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+    public Prioridad getPrioridad() {
+        return prioridad;
+    }
 }

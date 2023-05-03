@@ -27,7 +27,7 @@ public class MySqlConnection {
                         + "?serverTimezone=UTC&allowPublicKeyRetrieval=true";
                 Connection connection = DriverManager.getConnection(dbURL,userName,password);
                 this.connection = connection;
-                System.out.println("Conexion valida: " + connection.isValid(20));
+                System.out.println("Conexión valida: " + connection.isValid(20));
             } catch (SQLException exception) {
                 throw new RuntimeException(exception.getMessage());
             }

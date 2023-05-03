@@ -1,5 +1,6 @@
 package es.progcipfpbatoi.modelo.dto;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -35,12 +36,12 @@ public class Tarea {
     public int getId() {
         return id;
     }
+
+    public void setId(int id) {
+        this.id = id;
+    }
     public String getDescripcion() {
         return descripcion;
-    }
-
-    public boolean isFinalizada() {
-        return finalizada;
     }
 
     public Categoria getCategoria() {
@@ -84,5 +85,13 @@ public class Tarea {
 
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
+    }
+
+    public LocalDateTime getFechaAlta() {
+        return fechaAlta;
+    }
+
+    public boolean isFinalizada() {
+        return finalizada;
     }
 }
