@@ -100,9 +100,9 @@ public class SQLTareaDAO implements TareaDAO{
     private Tarea insert(Tarea tarea) throws DatabaseErrorException {
         String sql = String.format("INSERT INTO %s (id, descripcion, fechaAlta, finalizada, categoria) VALUES (?,?,?,?,?)",
                 TABLE_NAME);
+        connection =  new MySqlConnection("localhost", "tasks_db", "root", "123456").getConnection();
 
         try (
-                Connection connection =  new MySqlConnection("localhost", "tasks_db", "root", "123456").getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             preparedStatement.setInt(1, tarea.getId());
