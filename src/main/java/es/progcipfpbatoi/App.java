@@ -5,8 +5,11 @@ import es.progcipfpbatoi.controlador.TareaController;
 import es.progcipfpbatoi.controlador.TareaSearchController;
 import es.progcipfpbatoi.modelo.dao.*;
 import es.progcipfpbatoi.modelo.repositorios.TareaRepository;
+import es.progcipfpbatoi.services.MySqlConnection;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 
@@ -37,9 +40,16 @@ public class App extends Application {
         // Muestra de la escena principal.
         ChangeScene.change(stage, tareaController, "/vistas/tarea_list.fxml");
 
-        //TareaSearchController tareaSearchController = new TareaSearchController(tareaRepository);
-        //ChangeScene.change(stage, tareaSearchController, "/vistas/tarea_search.fxml");
+        // Cerramos la conexión al cerrar la aplicación
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent event) {
+                System.out.println("App closed");
+                new MySqlConnection("localhost", "tasks_db", "root", "123456").closeConnection();
+            }
+        });
     }
+
+
 
     public static void main(String[] args) {
         launch();

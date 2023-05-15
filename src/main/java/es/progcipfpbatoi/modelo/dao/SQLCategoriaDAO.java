@@ -16,15 +16,14 @@ import java.time.LocalDateTime;
 
 public class SQLCategoriaDAO implements CategoriaDAO{
 
+    private Connection connection;
     private static final String TABLE_NAME = "categorias";
     @Override
     public Categoria findById(int id) throws DatabaseErrorException {
         String sql = String.format("SELECT * FROM %s WHERE id = ?",TABLE_NAME);
+        connection =  new MySqlConnection("localhost", "tasks_db", "root", "123456").getConnection();
 
-        try (
-                Connection connection =  new MySqlConnection("localhost", "tasks_db", "root", "123456").getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-        ) {
+        try (PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
 
@@ -46,9 +45,9 @@ public class SQLCategoriaDAO implements CategoriaDAO{
     @Override
     public Categoria getByTypeAndPriority(Tipo tipo, Prioridad prioridad) throws NotFoundException, DatabaseErrorException {
         String sql = String.format("SELECT * FROM %s WHERE tipo = ? AND prioridad = ?",TABLE_NAME);
+        connection =  new MySqlConnection("localhost", "tasks_db", "root", "123456").getConnection();
 
         try (
-                Connection connection =  new MySqlConnection("localhost", "tasks_db", "root", "123456").getConnection();
                 PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
         ) {
             statement.setString(1, tipo.toString());

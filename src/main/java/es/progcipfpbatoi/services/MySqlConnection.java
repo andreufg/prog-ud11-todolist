@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class MySqlConnection {
 
-    private Connection connection;
+    private static Connection connection;
     private String ip;
     private String database;
     private String userName;
@@ -33,6 +33,16 @@ public class MySqlConnection {
             }
         }
         return this.connection;
+    }
+
+    public void closeConnection() {
+        if (connection!= null) {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
 

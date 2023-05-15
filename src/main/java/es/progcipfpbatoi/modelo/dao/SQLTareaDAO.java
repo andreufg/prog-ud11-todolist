@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 public class SQLTareaDAO implements TareaDAO{
 
+    private Connection connection;
     private static final String TABLE_NAME = "tareas";
 
     @Override
@@ -20,9 +21,9 @@ public class SQLTareaDAO implements TareaDAO{
         String sql = String.format("SELECT * FROM %s", TABLE_NAME);
 
         ArrayList<Tarea>tareas = new ArrayList<>();
+        connection =  new MySqlConnection("localhost", "tasks_db", "root", "123456").getConnection();
 
         try (
-                Connection connection =  new MySqlConnection("localhost", "tasks_db", "root", "123456").getConnection();
                 Statement statement = connection.createStatement();
                 ResultSet resultSet = statement.executeQuery(sql);
         ) {
@@ -55,9 +56,9 @@ public class SQLTareaDAO implements TareaDAO{
     @Override
     public Tarea getById(int id) throws NotFoundException, DatabaseErrorException {
         String sql = String.format("SELECT * FROM %s WHERE id = ?",TABLE_NAME);
+        connection =  new MySqlConnection("localhost", "tasks_db", "root", "123456").getConnection();
 
         try (
-                Connection connection =  new MySqlConnection("localhost", "tasks_db", "root", "123456").getConnection();
                 PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
         ) {
             statement.setInt(1, id);
@@ -150,9 +151,8 @@ public class SQLTareaDAO implements TareaDAO{
     @Override
     public void remove(Tarea tarea) throws DatabaseErrorException, NotFoundException {
         String sql = String.format("DELETE FROM %s WHERE id = ?", TABLE_NAME);
-
+        connection =  new MySqlConnection("localhost", "tasks_db", "root", "123456").getConnection();
         try (
-                Connection connection =  new MySqlConnection("localhost", "tasks_db", "root", "123456").getConnection();
                 PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             statement.setInt(1, tarea.getId());
@@ -173,4 +173,5 @@ public class SQLTareaDAO implements TareaDAO{
         Categoria categoria = new Categoria(idCategoria);
         return new Tarea(id, descripcion, fecha, finalizado, categoria);
     }
+
 }
