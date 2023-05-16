@@ -1,15 +1,16 @@
-package es.progcipfpbatoi.modelo.repositorios;
+package es.progcipfpbatoi.modelo.dao;
 
-import es.progcipfpbatoi.modelo.entidades.Categoria;
-import es.progcipfpbatoi.modelo.entidades.Tarea;
+import es.progcipfpbatoi.exceptions.NotFoundException;
+import es.progcipfpbatoi.modelo.dto.Categoria;
+import es.progcipfpbatoi.modelo.dto.Tarea;
 
 import java.util.ArrayList;
 
-public class InMemoryTareaRepository implements TareaRepository{
+public class InMemoryTareaDAO implements TareaDAO {
 
     private ArrayList<Tarea> tareas;
 
-    public InMemoryTareaRepository() {
+    public InMemoryTareaDAO() {
         this.tareas = new ArrayList<>();
         init();
     }
@@ -27,14 +28,14 @@ public class InMemoryTareaRepository implements TareaRepository{
     }
 
     public boolean save(Tarea tarea) {
-        int index = tareas.indexOf(tarea);
+        int indiceTarea = tareas.indexOf(tarea);
 
-        if (index == -1) {
+        if (indiceTarea == -1) {
             return this.tareas.add(tarea);
-        } else {
-            this.tareas.set(index, tarea);
-            return true;
         }
+
+        this.tareas.set(indiceTarea, tarea);
+        return true;
     }
 
     @Override
@@ -47,5 +48,16 @@ public class InMemoryTareaRepository implements TareaRepository{
         }
 
         return tareasFiltradas;
+    }
+
+    @Override
+    public Tarea getById(int id) throws NotFoundException {
+        int indiceTarea = tareas.indexOf(new Tarea(id));
+
+        if (indiceTarea != -1) {
+            return tareas.get(indiceTarea);
+        }
+
+        throw new NotFoundException("Tarea no encontrada");
     }
 }

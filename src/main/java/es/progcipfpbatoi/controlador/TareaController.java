@@ -1,15 +1,16 @@
 package es.progcipfpbatoi.controlador;
 
-import es.progcipfpbatoi.modelo.entidades.Categoria;
-import es.progcipfpbatoi.modelo.entidades.Tarea;
+import es.progcipfpbatoi.exceptions.DatabaseErrorException;
+import es.progcipfpbatoi.modelo.dto.Categoria;
+import es.progcipfpbatoi.modelo.dto.Tarea;
 import es.progcipfpbatoi.modelo.repositorios.TareaRepository;
+import es.progcipfpbatoi.util.AlertMessages;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -52,13 +53,18 @@ public class TareaController implements Initializable {
                 tareaListView.getItems().size() + 1,
                 nuevaTareaTextField.getText(),
                 categoria);
-
-        if (tareaRepository.save(tarea)) {
-            tareaListView.getItems().add(tarea);
-            nuevaTareaTextField.setText("");
-            categorySelector.getSelectionModel().clearSelection();
+        try {
+            if (tareaRepository.save(tarea)) {
+                tareaListView.getItems().add(tarea);
+                nuevaTareaTextField.setText("");
+                categorySelector.getSelectionModel().clearSelection();
+            }
+        }catch (DatabaseErrorException ex) {
+            AlertMessages.mostrarAlertError("No se ha podido guardar la tarea. Error en el acceso a la base de datos.");
         }
     }
+
+
 
     @FXML
     private void searchTasks() {
@@ -78,11 +84,10 @@ public class TareaController implements Initializable {
             tareaListView.refresh();
         }*/
         try {
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Tarea tarea = tareaListView.getSelectionModel().getSelectedItem();
             TareaDetailController tareaDetailController = new TareaDetailController(
                     tarea, tareaRepository, this, "/vistas/tarea_list.fxml");
-            ChangeScene.change(stage, tareaDetailController, "/vistas/tarea_detail.fxml");
+            ChangeScene.change(event, tareaDetailController, "/vistas/tarea_detail.fxml");
         } catch (IOException ex) {
             ex.printStackTrace();
         }
