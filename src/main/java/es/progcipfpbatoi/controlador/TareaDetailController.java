@@ -1,20 +1,23 @@
 package es.progcipfpbatoi.controlador;
 
-import es.progcipfpbatoi.modelo.entidades.Tarea;
+import es.progcipfpbatoi.exceptions.DatabaseErrorException;
+import es.progcipfpbatoi.exceptions.NotFoundException;
+import es.progcipfpbatoi.modelo.dto.Tarea;
 import es.progcipfpbatoi.modelo.repositorios.TareaRepository;
+import es.progcipfpbatoi.util.AlertMessages;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.Stack;
 
 public class TareaDetailController implements Initializable {
 
@@ -38,7 +41,6 @@ public class TareaDetailController implements Initializable {
             TareaRepository tareaRepository,
             Initializable controladorPadre,
             String vistaPadre) {
-
         this.tarea = tarea;
         this.tareaRepository = tareaRepository;
         this.controladorPadre = controladorPadre;
@@ -63,19 +65,34 @@ public class TareaDetailController implements Initializable {
 
     @FXML
     private void handleChangeInFinalizada() {
-        this.tarea.cambiarEstado();
-        this.tareaRepository.save(tarea);
+        try {
+            this.tarea.cambiarEstado();
+            this.tareaRepository.save(tarea);
+        } catch (DatabaseErrorException ex) {
+            AlertMessages.mostrarAlertError("No se ha podido guardar la tarea. Error en el acceso a la base de datos.");
+        }
     }
 
     @FXML
     private void handleButtonBack(ActionEvent event) {
         try {
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            ChangeScene.change(stage, controladorPadre, vistaPadre);
+            ChangeScene.change(event, controladorPadre, vistaPadre);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
+    @FXML
+    private void removeTask(ActionEvent event) {
+        try {
+            this.tareaRepository.remove(tarea);
+            ChangeScene.change(event, controladorPadre, vistaPadre);
+        } catch (NotFoundException | DatabaseErrorException ex) {
+            ex.printStackTrace();
+            AlertMessages.mostrarAlertError(ex.getMessage());
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
 

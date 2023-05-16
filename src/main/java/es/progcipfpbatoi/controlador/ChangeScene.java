@@ -1,7 +1,9 @@
 package es.progcipfpbatoi.controlador;
 
+import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -22,5 +24,11 @@ public class ChangeScene {
             stage.setScene(scene);
             stage.setResizable(true);
             stage.show();
+    }
+
+    public static void change(Event event, Initializable controller,
+                              String path_to_view_file) throws IOException{
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        change(stage, controller, path_to_view_file);
     }
 }

@@ -2,16 +2,14 @@ package es.progcipfpbatoi;
 
 import es.progcipfpbatoi.controlador.ChangeScene;
 import es.progcipfpbatoi.controlador.TareaController;
-import es.progcipfpbatoi.controlador.TareaDetailController;
-import es.progcipfpbatoi.modelo.entidades.Categoria;
-import es.progcipfpbatoi.modelo.entidades.Tarea;
-import es.progcipfpbatoi.modelo.repositorios.InMemoryTareaRepository;
+import es.progcipfpbatoi.controlador.TareaSearchController;
+import es.progcipfpbatoi.modelo.dao.*;
+import es.progcipfpbatoi.modelo.repositorios.TareaRepository;
+import es.progcipfpbatoi.services.MySqlConnection;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
+import javafx.event.EventHandler;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 
@@ -22,18 +20,38 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        // Creamos la capa de acceso de a datos
-        InMemoryTareaRepository inMemoryTareaRepository = new InMemoryTareaRepository();
-        TareaController tareaController = new TareaController(inMemoryTareaRepository);
+        // Creación del el DAO correspondiente. Aquí se selecciona el tipo de persistencia que utilizará la app
+
+        //InMemoryTareaDAO tareaDAO = new InMemoryTareaDAO();
+        //InMemoryCategoriaDAO categoriaDAO = new InMemoryCategoriaDAO();
+
+        //FileTareaDAO tareaDAO = new FileTareaDAO();
+        //FileCategoriaDAO categoriaDAO = new FileCategoriaDAO();
+
+        SQLTareaDAO tareaDAO = new SQLTareaDAO();
+        SQLCategoriaDAO categoriaDAO = new SQLCategoriaDAO();
+
+
+        // Creación del repositorio que será el que interactuará con el controlador.
+        TareaRepository tareaRepository = new TareaRepository(tareaDAO, categoriaDAO);
+
+        // Se crea al controlador proporcionando el/los repositorio/s que necesita
+        TareaController tareaController = new TareaController(tareaRepository);
+        // Muestra de la escena principal.
         ChangeScene.change(stage, tareaController, "/vistas/tarea_list.fxml");
 
-       /* Tarea tarea = new Tarea(6, "Sacar la basura", Categoria.HOGAR);
-        TareaDetailController tareaDetailController = new TareaDetailController(tarea, inMemoryTareaRepository);
-        ChangeScene.change(stage, tareaDetailController, "/vistas/tarea_detail.fxml");*/
+        // Cerramos la conexión al cerrar la aplicación
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent event) {
+                System.out.println("App closed");
+                new MySqlConnection("localhost", "tasks_db", "root", "123456").closeConnection();
+            }
+        });
     }
+
+
 
     public static void main(String[] args) {
         launch();
     }
-
 }

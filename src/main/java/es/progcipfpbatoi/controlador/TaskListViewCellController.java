@@ -1,6 +1,6 @@
 package es.progcipfpbatoi.controlador;
 
-import es.progcipfpbatoi.modelo.entidades.Tarea;
+import es.progcipfpbatoi.modelo.dto.Tarea;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
@@ -55,7 +55,7 @@ public class TaskListViewCellController extends ListCell<Tarea> {
 
     private void setCategoryImage(Tarea tarea) {
         try {
-            switch (tarea.getCategoria()) {
+            switch (tarea.getCategoria().getTipo()) {
                 case CLASE -> categoryImage.setImage(new Image(getPathImage("/images/homework.png")));
                 case HOGAR -> categoryImage.setImage(new Image(getPathImage("/images/housework.png")));
                 case JUGAR -> categoryImage.setImage(new Image(getPathImage("/images/play.png")));
